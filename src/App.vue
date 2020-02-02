@@ -6,29 +6,19 @@
     </v-toolbar>
     <v-content>
       <section>
-        <v-parallax :src="require('../public/assets/hero.jpeg')" height="600">
+        <v-parallax :src="require('../public/assets/wuhan2.jpg')" height="600">
           <v-layout
             column
             align-center
             justify-center
             class="white--text"
           >
-            <!-- <img src="../public/assets/vuetify.png" alt="Vuetify.js" height="200"> -->
             <h1 class="white--text mb-2 display-1 text-center">Number Of Death</h1>
-            <h3>from Wuhan Coronavirus</h3>
-            <h1 class="white--text mb-2 display-1 text-center">109</h1>
+            <vue-odometer :value="numOfDeath" format="d" theme="car" class="odometer" animation="smooth"></vue-odometer>
+            <br>
             <h1 class="white--text mb-2 display-1 text-center">Number Of Infected</h1>
-            <h1 class="white--text mb-2 display-1 text-center">6719</h1>
+            <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer"></vue-odometer>
             <div class="subheading mb-4 text-center">Powered by Estimator</div>
-            <!-- <v-btn
-              class="mt-12"
-              color="blue lighten-2"
-              dark
-              large
-              href="/pre-made-themes"
-            >
-              Get Started
-            </v-btn> -->
           </v-layout>
         </v-parallax>
       </section>
@@ -42,9 +32,9 @@
         >
           <v-flex xs12 sm4 class="my-4">
             <div class="text-center">
-              <h2 class="headline">The best way to start developing</h2>
+              <h2 class="headline">Summary of Wuhan Corona Virus</h2>
               <span class="subheading">
-                Cras facilisis mi vitae nunc
+                Last updated in 02-02-2020
               </span>
             </div>
           </v-flex>
@@ -54,45 +44,40 @@
                 <v-flex xs12 md4>
                   <v-card flat class="transparent">
                     <v-card-text class="text-center">
-                      <v-icon x-large class="blue--text text--lighten-2">mdi-palette</v-icon>
+                      <img width="64" src="../public/assets/death.png"/>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-center">Material Design</div>
+                      <div class="headline text-center">Number Of Death</div>
                     </v-card-title>
-                    <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                    <v-card-text class="display-3 font-weight-light" align="center">
+                      109
                     </v-card-text>
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
                   <v-card flat class="transparent">
                     <v-card-text class="text-center">
-                      <v-icon x-large class="blue--text text--lighten-2">mdi-flash</v-icon>
+                      <img width="64" src="../public/assets/infected.png"/>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">Fast development</div>
+                      <div class="headline">Number Of Infected</div>
                     </v-card-title>
-                    <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                    <v-card-text class="font-weight-light display-3" align="center">
+                      6719
                     </v-card-text>
                   </v-card>
                 </v-flex>
                 <v-flex xs12 md4>
-                  <v-card flat class="transparent">
+                  <v-card flat class="transparent" width="1000">
                     <v-card-text class="text-center">
-                      <v-icon x-large class="blue--text text--lighten-2">mdi-wrench</v-icon>
+                      <img src="../public/assets/lethality.png"/>
+                      <!-- <v-icon x-large class="blue--text text--lighten-2">mdi-wrench</v-icon> -->
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-center">Completely Open Sourced</div>
+                      <div class="headline text-center">Lethality</div>
                     </v-card-title>
-                    <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                    <v-card-text class="display-3 font-weight-light" align="center">
+                      2.2%
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -103,10 +88,10 @@
       </section>
 
       <section>
-        <v-parallax :src="require('../public/assets/section.jpg')" height="380">
+        <v-parallax :src="require('../public/assets/statistics2.jpg')" height="380">
           <v-layout column align-center justify-center>
-            <div class="headline white--text mb-4 text-center">Web development has never been easier</div>
-            <em>Kick-start your application today</em>
+            <div class="headline white--text mb-4 text-center">Check out other Estimators!</div>
+            <!-- <em></em> -->
             <v-btn
               class="mt-12"
               color="blue lighten-2"
@@ -114,7 +99,7 @@
               large
               href="/pre-made-themes"
             >
-              Get Started
+              Check other Estimators
             </v-btn>
           </v-layout>
         </v-parallax>
@@ -126,49 +111,17 @@
             <v-flex xs12 sm4>
               <v-card flat class="transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Company info</div>
+                  <div class="headline">Estimate number of Death</div>
                 </v-card-title>
-                <v-card-text>
-                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                  Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-                </v-card-text>
+                <RandomChart></RandomChart>
               </v-card>
             </v-flex>
             <v-flex xs12 sm4 offset-sm1>
               <v-card flat class="transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Contact us</div>
+                  <div class="headline">Estimate number of Infected</div>
                 </v-card-title>
-                <v-card-text>
-                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                </v-card-text>
-                <v-list class="transparent">
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-phone</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>777-867-5309</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-map-marker</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>Chicago, US</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-email</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title>john@vuetifyjs.com</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+                <RandomChart></RandomChart>
               </v-card>
             </v-flex>
           </v-layout>
@@ -189,35 +142,36 @@
       </v-footer>
     </v-content>
   </v-app>
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import Vuetify from 'vuetify'
+import VueOdometer from 'v-odometer/src'
+import RandomChart from './components/RandomChart'
 export default {
   name: 'app',
-  Vuetify: new Vuetify(),
-    data () {
-      return {
-        title: 'Estimator'
-      }
+  data () {
+    return {
+      title: 'Estimator',
+      numOfDeath: 0,
+      numOfInfected: 1000,
     }
-  // components: {
-  //   HelloWorld
-  // }
+  },
+  mounted() {
+    this.numOfDeath = 109;
+    this.numOfInfected = 2179;
+  },
+  Vuetify: new Vuetify(),
+  components: {
+    'vue-odometer': VueOdometer,
+    RandomChart,
+  }
 }
 </script>
 
 <style>
-/* #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
+.odometer {
+  font-size: 50px;
+}
 </style>
