@@ -2,23 +2,23 @@
   <div id="app">
    <v-app light>
     <v-toolbar color="white">
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <h1 style="font-family: Brush Script Std;">Estimator</h1>
     </v-toolbar>
     <v-content>
       <section>
-        <v-parallax :src="require('../public/assets/wuhan2.jpg')" height="600">
+        <v-parallax :src="require('../public/assets/wuhan-estimator.png')">
           <v-layout
             column
             align-center
             justify-center
             class="white--text"
           >
-            <h1 class="white--text mb-2 display-1 text-center">Number Of Death</h1>
+            <h1 class="white--text mb-2 display-1 font-weight-thin text-center">Number Of Death</h1>
             <vue-odometer :value="numOfDeath" format="d" theme="car" class="odometer" animation="smooth"></vue-odometer>
             <br>
-            <h1 class="white--text mb-2 display-1 text-center">Number Of Infected</h1>
+            <h1 class="white--text mb-2 display-1 font-weight-thin text-center">Number Of Infected</h1>
             <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer"></vue-odometer>
-            <div class="subheading mb-4 text-center">Powered by Estimator</div>
+            <div class="subheading mb-4 font-weight-thin text-center">From Wuhan Coronavirus</div>
           </v-layout>
         </v-parallax>
       </section>
@@ -49,7 +49,7 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-center">Number Of Death</div>
                     </v-card-title>
-                    <v-card-text class="display-3 font-weight-light" align="center">
+                    <v-card-text class="display-3 font-weight-thin" align="center">
                       109
                     </v-card-text>
                   </v-card>
@@ -57,12 +57,12 @@
                 <v-flex xs12 md4>
                   <v-card flat class="transparent">
                     <v-card-text class="text-center">
-                      <img width="64" src="../public/assets/infected.png"/>
+                      <img width="64" src="../public/assets/infection.png"/>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline">Number Of Infected</div>
                     </v-card-title>
-                    <v-card-text class="font-weight-light display-3" align="center">
+                    <v-card-text class="display-3 font-weight-thin" align="center">
                       6719
                     </v-card-text>
                   </v-card>
@@ -76,7 +76,7 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-center">Lethality</div>
                     </v-card-title>
-                    <v-card-text class="display-3 font-weight-light" align="center">
+                    <v-card-text class="display-3 font-weight-thin" align="center">
                       2.2%
                     </v-card-text>
                   </v-card>
@@ -91,7 +91,7 @@
         <v-parallax :src="require('../public/assets/statistics2.jpg')" height="380">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-4 text-center">Check out other Estimators!</div>
-            <!-- <em></em> -->
+            <em>Wanna know usage of plastic in 2030?</em>
             <v-btn
               class="mt-12"
               color="blue lighten-2"
