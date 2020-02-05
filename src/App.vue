@@ -71,7 +71,6 @@
                   <v-card flat class="transparent" width="1000">
                     <v-card-text class="text-center">
                       <img src="../public/assets/lethality.png"/>
-                      <!-- <v-icon x-large class="blue--text text--lighten-2">mdi-wrench</v-icon> -->
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-center">Lethality</div>
@@ -87,7 +86,7 @@
         </v-layout>
       </section>
 
-      <section>
+      <!-- <section>
         <v-parallax :src="require('../public/assets/statistics2.jpg')" height="380">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-4 text-center">Check out other Estimators!</div>
@@ -126,14 +125,13 @@
             </v-flex>
           </v-layout>
         </v-container>
-      </section>
+      </section> -->
 
       <v-footer color="blue darken-2">
         <v-layout row wrap align-center>
           <v-flex xs12>
             <div class="white--text ml-4">
               Please contact to 
-              <!-- <v-icon class="red--text">mdi-heart</v-icon> -->
               by <a class="white--text" href="https://vuetifyjs.com" target="_blank">jwhan0316@gmail.com</a>
               Junyoung Park
             </div>
