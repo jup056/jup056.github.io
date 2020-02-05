@@ -146,24 +146,68 @@
 <script>
 import Vuetify from 'vuetify'
 import VueOdometer from 'v-odometer/src'
-import RandomChart from './components/RandomChart'
+import { setTimeout } from 'timers';
+
 export default {
   name: 'app',
+  Vuetify: new Vuetify(),
   data () {
     return {
       title: 'Estimator',
       numOfDeath: 0,
-      numOfInfected: 1000,
+      numOfInfected: 0,
+      duration: 0,
+      // junyoung's data
+      n: 60,
+      x: 421,
+      n2: 2500,
+      x2: 16880,
     }
   },
   mounted() {
-    this.numOfDeath = 109;
-    this.numOfInfected = 2179;
+    this.startTime();
   },
-  Vuetify: new Vuetify(),
   components: {
     'vue-odometer': VueOdometer,
-    RandomChart,
+    // RandomChart,
+  },
+  beforeDestroy() {
+    console.log('Clearing setTimeOut');
+    clearTimeout();
+  },
+  methods: {
+    startTime() {
+      let td = 86400 / this.n;
+      let ti = 86400 / this.n2;
+      let today = new Date();
+      let h = today.getHours();
+      let m = today.getMinutes();
+      let s = today.getSeconds();
+
+      h = h + 16;
+      if (h >= 24) {h = h - 24}
+
+      h = h * 3600; 
+      m = m * 60;
+
+      let current_time_in_second = h + m + s;
+
+      let c = current_time_in_second/td;
+      let c2 = current_time_in_second/ti;
+
+      this.numOfDeath = this.x + Math.round(c);
+      this.numOfInfected = this.x2 + Math.round(c2);  
+
+      console.log("Num Of Death: ", this.numOfDeath, "Num Of Infected", this.numOfInfected);
+
+      setTimeout(this.startTime, 500);
+    },
+    checkTime(i) {
+      if (i < 10) {
+        i = "0" + i;
+        return i;
+      }
+    }
   }
 }
 </script>
