@@ -17,7 +17,7 @@
             <vue-odometer :value="numOfDeath" format="d" theme="car" class="odometer" animation="smooth"></vue-odometer>
             <br>
             <h1 class="white--text mb-2 display-1 font-weight-thin text-center">Number Of Infected</h1>
-            <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer"></vue-odometer>
+            <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer" animation="smooth"></vue-odometer>
             <div class="subheading mb-4 font-weight-thin text-center">From Wuhan Coronavirus</div>
           </v-layout>
         </v-parallax>
@@ -165,14 +165,15 @@ export default {
     }
   },
   mounted() {
+    clearTimeout();
     this.startTime();
   },
   components: {
     'vue-odometer': VueOdometer,
     // RandomChart,
   },
-  beforeDestroy() {
-    console.log('Clearing setTimeOut');
+  destroyed() {
+    console.log('destroyed');
     clearTimeout();
   },
   methods: {
