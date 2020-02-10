@@ -2,7 +2,7 @@
   <div id="app">
    <v-app light>
     <v-toolbar color="white">
-      <h1 style="font-family: Brush Script Std;">Estimator</h1>
+      <h1 style="font-family: Brush Script Std;">Estimators</h1>
     </v-toolbar>
     <v-content>
       <section>
@@ -50,7 +50,7 @@
                       <div class="headline text-center">Number Of Death</div>
                     </v-card-title>
                     <v-card-text class="display-3 font-weight-thin" align="center">
-                      109
+                      110
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -152,13 +152,66 @@ export default {
   name: 'app',
   Vuetify: new Vuetify(),
   data () {
+        let table = [
+                    [1,41],
+                    [1,41],
+                    [1,41],
+                    [1,41],
+                    [2,45],
+                    [2,45],
+                    [2,62],
+                    [2,121],
+                    [3,198],
+                    [6,291],
+                    [9,440],
+                    [17,571],
+                    [25,830],
+                    [41,1287],
+                    [56,1975],
+                    [80,2744],
+                    [106,4515],
+                    [132,5974],
+                    [170,7711],
+                    [213,9692],
+                    [259,11791],
+                    [304,14380],
+                    [361,17205],
+                    [425,20440],
+                    [490,24324],
+                    [563,28018],
+                    ];
+
+      let l = table.length; //length of table
+
+      let table_x1 = [1]; //creating an array with one element
+      let table_x2 = []; //creating empty array
+
+      let sum = 0; //sum of element in table_x2
+      let num = 0; //num of non-zero elements in table_x2
+      let avg_percentage = 0; //sum/num - 0.1 (If you substract 0.1, it gives you a better value)
+      this.death_today = 0; // number of death occured on the day
+
+      let i = 0;
+      for (i=1; i<=l-1; i++){
+        table_x1[i] = table[i][0]-table[i-1][0]; //calculating number of death occured on single day
+        if (table_x1[i-1]==0){ //calculating percentage of death increment compare to the day before
+          table_x2[i-1] = 0; //if an element in table_x1 is zero, then skip division and set new element in table_x2 as zero
+        }else{
+          table_x2[i-1] = table_x1[i]/table_x1[i-1]; //if an element in table_x1 is not zero, perform division
+          num++; //calculating number of non-zero elements in table_x2
+        }
+        sum = sum + table_x2[i-1]; //sum of all elements in table_x2 
+      }
+      avg_percentage = sum/num-0.1; //calculating average percentage over total period of time (since day 1)
+      this.death_today = table[l-1][0]+Math.round( table_x1[table_x1.length-1]*avg_percentage ); //returns number of death will occur the next day
+      table.push([this.death_today,0]); // creating new array in table
     return {
       title: 'Estimator',
       numOfDeath: 0,
       numOfInfected: 0,
       duration: 0,
       // junyoung's data
-      n: 60,
+      n: this.death_today,
       x: 421,
       n2: 2500,
       x2: 16880,
@@ -166,6 +219,8 @@ export default {
   },
   mounted() {
     clearTimeout();
+    console.log('component has mounted');
+    this.calculateNum();
     this.startTime();
   },
   components: {
