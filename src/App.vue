@@ -49,6 +49,7 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-center">Number Of Death</div>
                     </v-card-title>
+                    <date-picker/>
                     <v-card-text class="display-3 font-weight-thin" align="center">
                       110
                     </v-card-text>
@@ -62,6 +63,7 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline">Number Of Infected</div>
                     </v-card-title>
+                    <date-picker/>
                     <v-card-text class="display-3 font-weight-thin" align="center">
                       6719
                     </v-card-text>
@@ -146,6 +148,7 @@
 <script>
 import Vuetify from 'vuetify'
 import VueOdometer from 'v-odometer/src'
+import DatePicker from './components/DatePicker.vue'
 import { setTimeout } from 'timers';
 
 export default {
@@ -225,6 +228,7 @@ export default {
   },
   components: {
     'vue-odometer': VueOdometer,
+    'date-picker': DatePicker,
     // RandomChart,
   },
   destroyed() {
