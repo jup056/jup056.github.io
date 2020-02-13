@@ -16,31 +16,31 @@
       v-on="on"
     ></v-text-field>
   </template>
-  <v-date-picker v-model="date" no-title scrollable>
+  <v-date-picker v-model="date" no-title scrollable :min="today">
     <v-spacer></v-spacer>
     <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-    <!-- <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn> -->
     <v-btn text color="primary" @click="emitDate(date)">OK</v-btn>
     </v-date-picker>
   </v-menu>
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'app',
   data () {
     return {
       menu: false,
-      date: new Date().toISOString().substr(0, 10),
+      today: moment().format('YYYY-MM-DD'),
+      date: moment().format('YYYY-MM-DD'),
       modal: false,
     }
   },
   methods: {
     emitDate(date) {
-      console.log('emitting date', date);
       this.$emit('emitDate', date);
       this.$refs.menu.save(date);
-      console.log('menu saved', date);
     }
   }
   // props: {
