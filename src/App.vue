@@ -49,9 +49,9 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-center">Number Of Death</div>
                     </v-card-title>
-                    <date-picker/>
+                    <date-picker v-on:emitDate="eventPatcher"/>
                     <v-card-text class="display-3 font-weight-thin" align="center">
-                      110
+                      <vue-odometer :value="estimatedDeathNum" format="d" class="odometer" animation="smooth"></vue-odometer>
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -146,93 +146,77 @@
 </template>
 
 <script>
-import Vuetify from 'vuetify'
-import VueOdometer from 'v-odometer/src'
-import DatePicker from './components/DatePicker.vue'
-import { setTimeout } from 'timers';
+import Vuetify from "vuetify";
+import VueOdometer from "v-odometer/src";
+import DatePicker from "./components/DatePicker.vue";
+import { setTimeout } from "timers";
 
 export default {
-  name: 'app',
+  name: "app",
   Vuetify: new Vuetify(),
-  data () {
-        let table = [
-                    [1,41],
-                    [1,41],
-                    [1,41],
-                    [1,41],
-                    [2,45],
-                    [2,45],
-                    [2,62],
-                    [2,121],
-                    [3,198],
-                    [6,291],
-                    [9,440],
-                    [17,571],
-                    [25,830],
-                    [41,1287],
-                    [56,1975],
-                    [80,2744],
-                    [106,4515],
-                    [132,5974],
-                    [170,7711],
-                    [213,9692],
-                    [259,11791],
-                    [304,14380],
-                    [361,17205],
-                    [425,20440],
-                    [490,24324],
-                    [563,28018],
-                    ];
-
-      let l = table.length; //length of table
-
-      let table_x1 = [1]; //creating an array with one element
-      let table_x2 = []; //creating empty array
-
-      let sum = 0; //sum of element in table_x2
-      let num = 0; //num of non-zero elements in table_x2
-      let avg_percentage = 0; //sum/num - 0.1 (If you substract 0.1, it gives you a better value)
-      this.death_today = 0; // number of death occured on the day
-
-      let i = 0;
-      for (i=1; i<=l-1; i++){
-        table_x1[i] = table[i][0]-table[i-1][0]; //calculating number of death occured on single day
-        if (table_x1[i-1]==0){ //calculating percentage of death increment compare to the day before
-          table_x2[i-1] = 0; //if an element in table_x1 is zero, then skip division and set new element in table_x2 as zero
-        }else{
-          table_x2[i-1] = table_x1[i]/table_x1[i-1]; //if an element in table_x1 is not zero, perform division
-          num++; //calculating number of non-zero elements in table_x2
-        }
-        sum = sum + table_x2[i-1]; //sum of all elements in table_x2 
-      }
-      avg_percentage = sum/num-0.1; //calculating average percentage over total period of time (since day 1)
-      this.death_today = table[l-1][0]+Math.round( table_x1[table_x1.length-1]*avg_percentage ); //returns number of death will occur the next day
-      table.push([this.death_today,0]); // creating new array in table
+  data() {
     return {
-      title: 'Estimator',
+      title: "Estimator",
       numOfDeath: 0,
       numOfInfected: 0,
       duration: 0,
       // junyoung's data
-      n: this.death_today,
+      n: 60,
       x: 421,
       n2: 2500,
       x2: 16880,
-    }
+      // record
+      record: [
+        [1, 41],
+        [1, 41],
+        [1, 41],
+        [1, 41],
+        [2, 45],
+        [2, 45],
+        [2, 62],
+        [2, 121],
+        [3, 198],
+        [6, 291],
+        [9, 440],
+        [17, 571],
+        [25, 830],
+        [41, 1287],
+        [56, 1975],
+        [80, 2744],
+        [106, 4515],
+        [132, 5974],
+        [170, 7711],
+        [213, 9692],
+        [259, 11791],
+        [304, 14380],
+        [361, 17205],
+        [425, 20440],
+        [490, 24324],
+        [563, 28018],
+        [637, 31161],
+        [722, 34546],
+        [811, 37198],
+        [908, 40171],
+        [1016, 42638]
+      ],
+      newRecord: [],
+      // estimated death num
+      estimatedDeathNum: 1016,
+    };
   },
   mounted() {
     clearTimeout();
-    console.log('component has mounted');
-    this.calculateNum();
+    // console.log('component has mounted');
+    // this.calculateNum();
     this.startTime();
   },
   components: {
-    'vue-odometer': VueOdometer,
-    'date-picker': DatePicker,
+    "vue-odometer": VueOdometer,
+    "date-picker": DatePicker
     // RandomChart,
   },
   destroyed() {
-    console.log('destroyed');
+    console.log("destroyed");
     clearTimeout();
   },
   methods: {
@@ -245,25 +229,67 @@ export default {
       let s = today.getSeconds();
 
       h = h + 16;
-      if (h >= 24) {h = h - 24}
+      if (h >= 24) {
+        h = h - 24;
+      }
 
-      h = h * 3600; 
+      h = h * 3600;
       m = m * 60;
 
       let current_time_in_second = h + m + s;
 
-      let c = current_time_in_second/td;
-      let c2 = current_time_in_second/ti;
+      let c = current_time_in_second / td;
+      let c2 = current_time_in_second / ti;
 
       this.numOfDeath = this.x + Math.round(c);
-      this.numOfInfected = this.x2 + Math.round(c2);  
+      this.numOfInfected = this.x2 + Math.round(c2);
 
-      console.log("Num Of Death: ", this.numOfDeath, "Num Of Infected", this.numOfInfected);
+      // console.log(
+      //   "Num Of Death: ",
+      //   this.numOfDeath,
+      //   "Num Of Infected",
+      //   this.numOfInfected
+      // );
 
       setTimeout(this.startTime, 500);
     },
+    calculateDeath(days){
+      let num = 0;
+      let sum = 0;
+      let avg_percent = 0;
+      let estimatedDeathPerDay = 0;
+      let increaseRecord = [1];
+      let increasePercent = [0];
+      for (let i = 1; i < this.record.length; i++) {
+        // increaseRecord[i] = this.record[i][0] - this.record[i-1][0];
+        console.log( this.record[i][0], this.record[i-1][0]);
+        increaseRecord.push(this.record[i][0] - this.record[i-1][0]);
+        console.log(increaseRecord);
+        if (increaseRecord[i-1] === 0) {
+          increasePercent[i-1] = 0;
+        } else {
+          increasePercent[i-1] = increaseRecord[i]/increaseRecord[i-1];
+          num++;
+        }
+        sum += increasePercent[i-1];
+        avg_percent = sum / num - 0.1;
+        estimatedDeathPerDay = this.record[this.record.length - 1][0] + Math.round(increaseRecord[increaseRecord.length-1]*avg_percent);
+      }
+      console.log('estimated death: ', estimatedDeathPerDay);
+
+      for (let k = 1; k <= days; k++){
+        console.log('avg_percent', avg_percent)
+        estimatedDeathPerDay = estimatedDeathPerDay * avg_percent;
+        console.log('future death num?', estimatedDeathPerDay);
+      }
+      console.log('estimated death after ', days, estimatedDeathPerDay+this.record[this.record.length-1][0]);
+      this.estimatedDeathNum = estimatedDeathPerDay;
+    },
+    eventPatcher(date) {
+      this.calculateDeath(Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));
+    }
   }
-}
+};
 </script>
 
 <style>
