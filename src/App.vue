@@ -196,7 +196,9 @@ export default {
         [908, 40171],
         [1016, 42638],
         [1113, 44653],
-        [1353, 59493]
+        [1353, 59493],
+        [1500, 64000], //estimated number, update once obtain official data
+
       ],
       newRecord: [],
       // estimated death num
@@ -223,10 +225,10 @@ export default {
   },
   methods: {
     startTime() {
-      let n = 1000;
-      let n2 = 10000;
+      let n = 150; //need to be improved
+      let n2 = 4500; //need to be improved
 
-      let td = 86400 / this.n;
+      let td = 86400 / n;
       let ti = 86400 / n2;
       let today = new Date();
       let h = today.getHours();
@@ -293,7 +295,7 @@ export default {
           num++;
         }
         sum += increasePercent[i-1];
-        this.avg_infected_percent = sum / num - 0.1;
+        this.avg_infected_percent = sum / num - 0.17;
         estimatedInfectedPerDay = this.record[this.record.length - 1][1] + Math.round(increaseRecord[increaseRecord.length-1] * this.avg_infected_percent);
       }
       return estimatedInfectedPerDay;
