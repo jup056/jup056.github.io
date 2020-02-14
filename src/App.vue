@@ -2,7 +2,7 @@
   <div id="app">
    <v-app light>
     <v-toolbar color="white">
-      <h1 style="font-family: Brush Script Std;">Estimator</h1>
+      <h1 style="font-family: Brush Script Std;">Estimators</h1>
     </v-toolbar>
     <v-content>
       <section>
@@ -162,11 +162,6 @@ export default {
       numOfInfected: 0,
       duration: 0,
       today: moment().format('YYYY-MM-DD'),
-      // junyoung's data
-      n: 60,
-      x: 421,
-      n2: 2500,
-      x2: 16880,
       // record
       record: [
         [1, 41],
@@ -200,6 +195,10 @@ export default {
         [811, 37198],
         [908, 40171],
         [1016, 42638],
+        [1113, 44653],
+        [1353, 59493],
+        [1500, 64000], //estimated number, update once obtain official data
+
       ],
       newRecord: [],
       // estimated death num
@@ -226,8 +225,11 @@ export default {
   },
   methods: {
     startTime() {
-      let td = 86400 / this.n;
-      let ti = 86400 / this.n2;
+      let n = 150; //need to be improved
+      let n2 = 4500; //need to be improved
+
+      let td = 86400 / n;
+      let ti = 86400 / n2;
       let today = new Date();
       let h = today.getHours();
       let m = today.getMinutes();
@@ -246,8 +248,8 @@ export default {
       let c = current_time_in_second / td;
       let c2 = current_time_in_second / ti;
 
-      this.numOfDeath = this.x + Math.round(c);
-      this.numOfInfected = this.x2 + Math.round(c2);
+      this.numOfDeath = this.estimatedDeathNum + Math.round(c);
+      this.numOfInfected = this.estimatedInfectedNum + Math.round(c2);
       // console.log(
       //   "Num Of Death: ",
       //   this.numOfDeath,
@@ -293,7 +295,7 @@ export default {
           num++;
         }
         sum += increasePercent[i-1];
-        this.avg_infected_percent = sum / num - 0.1;
+        this.avg_infected_percent = sum / num - 0.17;
         estimatedInfectedPerDay = this.record[this.record.length - 1][1] + Math.round(increaseRecord[increaseRecord.length-1] * this.avg_infected_percent);
       }
       return estimatedInfectedPerDay;
