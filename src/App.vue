@@ -206,12 +206,16 @@ export default {
       estimatedInfectedNum: 0,
       avg_death_percent: 0,
       avg_infected_percent: 0,
+      estimatedIncreaseDeathPerDay: 0,
+      estimatedIncreaseInfectedPerDay: 0,
     };
   },
   mounted() {
     clearTimeout();
-    this.estimatedDeathNum = this.record[this.record.length-1][0],
-    this.estimatedInfectedNum = this.record[this.record.length-1][1],
+    this.estimatedDeathNum = this.record[this.record.length-1][0];
+    this.estimatedInfectedNum = this.record[this.record.length-1][1];
+    this.estimatedIncreaseDeathPerDay = this.estimateDeathPerDay() - this.record[this.record.length-1][0];
+    this.estimatedIncreaseInfectedPerDay = this.estimateInfectedPerDay() - this.record[this.record.length-1][1];
     this.startTime();
   },
   components: {
@@ -225,11 +229,10 @@ export default {
   },
   methods: {
     startTime() {
-      let n = 150; //need to be improved
-      let n2 = 4500; //need to be improved
-
-      let td = 86400 / n;
-      let ti = 86400 / n2;
+      let n = this.estimatedIncreaseDeathPerDay;
+      let n2 = this.estimatedIncreaseInfectedPerDay;
+      let td = 86400 /n;
+      let ti = 86400 /n2;
       let today = new Date();
       let h = today.getHours();
       let m = today.getMinutes();
@@ -248,14 +251,15 @@ export default {
       let c = current_time_in_second / td;
       let c2 = current_time_in_second / ti;
 
-      this.numOfDeath = this.estimatedDeathNum + Math.round(c);
-      this.numOfInfected = this.estimatedInfectedNum + Math.round(c2);
-      // console.log(
-      //   "Num Of Death: ",
-      //   this.numOfDeath,
-      //   "Num Of Infected",
-      //   this.numOfInfected
-      // );
+      this.numOfDeath = this.record[this.record.length-1][0] + Math.round(c);
+      this.numOfInfected = this.record[this.record.length-1][1] + Math.round(c2);
+
+      console.log(
+        "Num Of Death: ",
+        this.numOfDeath,
+        "Num Of Infected",
+        this.numOfInfected
+      );
       setTimeout(this.startTime, 500);
     },
     estimateDeathPerDay(){
@@ -266,6 +270,7 @@ export default {
       let sum = 0;
 
       for (let i = 1; i < this.record.length; i++) {
+        console.log('running loop');
         increaseRecord.push(this.record[i][0] - this.record[i-1][0]);
         if (increaseRecord[i-1] === 0) {
           increasePercent[i-1] = 0;
@@ -277,6 +282,7 @@ export default {
         this.avg_death_percent = sum / num - 0.1;
         estimatedDeathPerDay = this.record[this.record.length - 1][0] + Math.round(increaseRecord[increaseRecord.length-1]*this.avg_death_percent);
       }
+      console.log('about to return estimated death per day', estimatedDeathPerDay);
       return estimatedDeathPerDay;
     },
     estimateInfectedPerDay(){
