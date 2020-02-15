@@ -134,8 +134,8 @@
           <v-flex xs12>
             <div class="white--text ml-4">
               Please contact to 
-              by <a class="white--text" href="https://vuetifyjs.com" target="_blank">jwhan0316@gmail.com</a>
-              Junyoung Park
+              by <a class="white--text" href="https://vuetifyjs.com" target="_blank">worldestimator@gmail.com</a>
+              Jaden Wilson
             </div>
           </v-flex>
         </v-layout>
@@ -213,10 +213,10 @@ export default {
   },
   mounted() {
     clearTimeout();
-    this.estimatedDeathNum = this.record[this.record.length-1][0];
-    this.estimatedInfectedNum = this.record[this.record.length-1][1];
-    this.estimatedIncreaseDeathPerDay = this.estimateDeathPerDay() - this.record[this.record.length-1][0];
-    this.estimatedIncreaseInfectedPerDay = this.estimateInfectedPerDay() - this.record[this.record.length-1][1];
+    this.estimatedDeathNum = this.estimateDeathPerDay();
+    this.estimatedInfectedNum = this.estimateInfectedPerDay();
+    this.estimatedIncreaseDeathPerDay = this.estimatedDeathNum - this.record[this.record.length-1][0];
+    this.estimatedIncreaseInfectedPerDay = this.estimatedInfectedNum - this.record[this.record.length-1][1];
     this.startTime();
   },
   components: {
@@ -233,10 +233,10 @@ export default {
       let n = this.estimatedIncreaseDeathPerDay;
       let n2 = this.estimatedIncreaseInfectedPerDay;
 
-      let today = new Date();
-      let h = today.getHours();
-      let m = today.getMinutes();
-      let s = today.getSeconds();
+      let time = new Date();
+      let h = time.getHours();
+      let m = time.getMinutes();
+      let s = time.getSeconds();
 
       if (h < 8){
         h = h + 16;
@@ -282,7 +282,7 @@ export default {
         sum_of_element_Record += increaseRecord[i];
         sum_of_element_Percent += increasePercent[i-1];
       }
-      this.avg_death_percent = sum_of_element_Percent / 10;
+      this.avg_death_percent = sum_of_element_Percent / 10 - 0.05;
       this.avg_death_number = sum_of_element_Record / 10;
 
       estimatedDeathPerDay = this.record[this.record.length - 1][0] + Math.round(this.avg_death_number*this.avg_death_percent);
@@ -305,7 +305,7 @@ export default {
         sum_of_element_Record += increaseRecord[i];
         sum_of_element_Percent += increasePercent[i-1];
       }
-      this.avg_death_percent = sum_of_element_Percent / 10;
+      this.avg_death_percent = sum_of_element_Percent / 10 - 0.15;
       this.avg_death_number = sum_of_element_Record / 10;
 
       estimatedInfectedPerDay = this.record[this.record.length - 1][1] + Math.round(this.avg_death_number*this.avg_death_percent);
@@ -314,30 +314,22 @@ export default {
     calculateDeath(days){
       let estimatedDeathPerDay = this.estimateDeathPerDay();
       for (let k = 1; k <= days; k++){
-        estimatedDeathPerDay = estimatedDeathPerDay * this.avg_death_percent;
+        estimatedDeathPerDay = estimatedDeathPerDay + Math.round(this.avg_death_number*this.avg_death_percent);
       }
       this.estimatedDeathNum = estimatedDeathPerDay;
     },
     calculateInfected(days){
       let estimatedInfectedPerDay = this.estimateInfectedPerDay();
       for (let k = 1; k <= days; k++){
-        estimatedInfectedPerDay = estimatedInfectedPerDay * this.avg_infected_percent;
+        estimatedInfectedPerDay = estimatedInfectedPerDay + Math.round(this.avg_death_number*this.avg_death_percent);
       }
       this.estimatedInfectedNum = estimatedInfectedPerDay;
     },
     eventDeathPatcher(date) {
-      if(date === this.today) {
-        this.estimatedDeathNum = this.record[this.record.length-1][0];
-        return;
-      }
-      this.calculateDeath((Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400)));
+      this.calculateDeath(1+Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400));
     },
     eventInfectedPatcher(date) {
-      if(date === this.today) {
-        this.estimatedInfectedNum = this.record[this.record.length-1][1];
-        return;
-      }
-      this.calculateInfected((Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400)));
+      this.calculateInfected(1+Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400));
     }
   }
 };
