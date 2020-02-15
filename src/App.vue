@@ -197,8 +197,9 @@ export default {
         [1016, 42638],
         [1113, 44653],
         [1353, 59493],
-        [1500, 64000], //estimated number, update once obtain official data
-
+        [1380, 63851], 
+        [1523, 66492],
+        [1681, 72688]
       ],
       newRecord: [],
       // estimated death num
@@ -231,16 +232,18 @@ export default {
     startTime() {
       let n = this.estimatedIncreaseDeathPerDay;
       let n2 = this.estimatedIncreaseInfectedPerDay;
-      let td = 86400 /n;
-      let ti = 86400 /n2;
+
       let today = new Date();
       let h = today.getHours();
       let m = today.getMinutes();
       let s = today.getSeconds();
 
-      h = h + 16;
-      if (h >= 24) {
-        h = h - 24;
+      if (h < 8){
+        h = h + 16;
+      } else if (h == 8){
+        h = 0;
+      } else {
+        h = h - 8;
       }
 
       h = h * 3600;
@@ -248,8 +251,8 @@ export default {
 
       let current_time_in_second = h + m + s;
 
-      let c = current_time_in_second / td;
-      let c2 = current_time_in_second / ti;
+      let c = (current_time_in_second * n)/ 86400;
+      let c2 = (current_time_in_second * n2)/ 86400;
 
       this.numOfDeath = this.record[this.record.length-1][0] + Math.round(c);
       this.numOfInfected = this.record[this.record.length-1][1] + Math.round(c2);
@@ -264,46 +267,48 @@ export default {
     },
     estimateDeathPerDay(){
       let estimatedDeathPerDay = 0;
-      let increaseRecord = [1];
-      let increasePercent = [0];      
-      let num = 0;
-      let sum = 0;
+      let increaseRecord = [0];
+      let increasePercent = [];      
 
-      for (let i = 1; i < this.record.length; i++) {
+      let sum_of_element_Record = 0;
+      let sum_of_element_Percent = 0;
+
+      for (var i = 1; i < this.record.length-1; i++) {
         console.log('running loop');
-        increaseRecord.push(this.record[i][0] - this.record[i-1][0]);
-        if (increaseRecord[i-1] === 0) {
-          increasePercent[i-1] = 0;
-        } else {
-          increasePercent[i-1] = increaseRecord[i]/increaseRecord[i-1];
-          num++;
-        }
-        sum += increasePercent[i-1];
-        this.avg_death_percent = sum / num - 0.1;
-        estimatedDeathPerDay = this.record[this.record.length - 1][0] + Math.round(increaseRecord[increaseRecord.length-1]*this.avg_death_percent);
+        increaseRecord[i] = (this.record[i+1][0] - this.record[i][0]);
+        increasePercent[i-1] = increaseRecord[i]/increaseRecord[i-1]; 
       }
+      for (let i = increaseRecord.length-10; i < increaseRecord.length; i++) {
+        sum_of_element_Record += increaseRecord[i];
+        sum_of_element_Percent += increasePercent[i-1];
+      }
+      this.avg_death_percent = sum_of_element_Percent / 10;
+      this.avg_death_number = sum_of_element_Record / 10;
+
+      estimatedDeathPerDay = this.record[this.record.length - 1][0] + Math.round(this.avg_death_number*this.avg_death_percent);
       console.log('about to return estimated death per day', estimatedDeathPerDay);
       return estimatedDeathPerDay;
     },
     estimateInfectedPerDay(){
       let estimatedInfectedPerDay = 0;
-      let increaseRecord = [1];
-      let increasePercent = [0];      
-      let num = 0;
-      let sum = 0;
+      let increaseRecord = [0];
+      let increasePercent = [];      
 
-      for (let i = 1; i < this.record.length; i++) {
-        increaseRecord.push(this.record[i][1] - this.record[i-1][1]);
-        if (increaseRecord[i-1] === 0) {
-          increasePercent[i-1] = 0;
-        } else {
-          increasePercent[i-1] = increaseRecord[i]/increaseRecord[i-1];
-          num++;
-        }
-        sum += increasePercent[i-1];
-        this.avg_infected_percent = sum / num - 0.17;
-        estimatedInfectedPerDay = this.record[this.record.length - 1][1] + Math.round(increaseRecord[increaseRecord.length-1] * this.avg_infected_percent);
+      let sum_of_element_Record = 0;
+      let sum_of_element_Percent = 0;
+
+      for (let i = 1; i < this.record.length-1; i++) {
+        increaseRecord[i] = (this.record[i+1][1] - this.record[i][1]);
+        increasePercent[i-1] = increaseRecord[i]/increaseRecord[i-1]; 
       }
+      for (let i = increaseRecord.length-10; i < increaseRecord.length; i++) {
+        sum_of_element_Record += increaseRecord[i];
+        sum_of_element_Percent += increasePercent[i-1];
+      }
+      this.avg_death_percent = sum_of_element_Percent / 10;
+      this.avg_death_number = sum_of_element_Record / 10;
+
+      estimatedInfectedPerDay = this.record[this.record.length - 1][1] + Math.round(this.avg_death_number*this.avg_death_percent);
       return estimatedInfectedPerDay;
     },
     calculateDeath(days){
@@ -325,14 +330,14 @@ export default {
         this.estimatedDeathNum = this.record[this.record.length-1][0];
         return;
       }
-      this.calculateDeath(Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));
+      this.calculateDeath((Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400)));
     },
     eventInfectedPatcher(date) {
       if(date === this.today) {
         this.estimatedInfectedNum = this.record[this.record.length-1][1];
         return;
       }
-      this.calculateInfected(Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));
+      this.calculateInfected((Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400)));
     }
   }
 };
