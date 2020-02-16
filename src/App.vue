@@ -19,6 +19,10 @@
             <h1 class="white--text mb-2 display-1 font-weight-thin text-center">Number Of Infected</h1>
             <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer" animation="smooth"></vue-odometer>
             <div class="subheading mb-4 font-weight-thin text-center">From Wuhan Coronavirus</div>
+            <br>
+            <h1 class="white--text mb-2 display-1 font-weight-thin text-center">{{this.currentWuhanTime}}, Wuhan, Hubei</h1>
+            <!-- <div class="subheading mb-4 font-weight-thin text-center">Current Time in Wuhan</div> -->
+            <!-- <vue-odometer :value="numOfInfected" theme="car" format="d" class="odometer" animation="smooth"></vue-odometer> -->
           </v-layout>
         </v-parallax>
       </section>
@@ -78,7 +82,7 @@
                       <div class="headline text-center">Lethality</div>
                     </v-card-title>
                     <v-card-text class="display-3 font-weight-thin" align="center">
-                      2.2%
+                      {{ (this.record[this.record.length-1][0] / this.record[this.record.length-1][1] * 100).toFixed(2) }} %
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -133,8 +137,8 @@
         <v-layout row wrap align-center>
           <v-flex xs12>
             <div class="white--text ml-4">
-              Please contact to 
-              by <a class="white--text" href="https://vuetifyjs.com" target="_blank">worldestimator@gmail.com</a>
+              Please contact to by
+              <b>worldestimator@gmail.com</b>,
               Jaden Wilson
             </div>
           </v-flex>
@@ -209,10 +213,13 @@ export default {
       avg_infected_percent: 0,
       estimatedIncreaseDeathPerDay: 0,
       estimatedIncreaseInfectedPerDay: 0,
+      currentWuhanTime: '',
     };
   },
   mounted() {
     clearTimeout();
+    clearInterval();
+    setInterval(this.updateTime, 100);
     this.estimatedDeathNum = this.estimateDeathPerDay();
     this.estimatedInfectedNum = this.estimateInfectedPerDay();
     this.estimatedIncreaseDeathPerDay = this.estimatedDeathNum - this.record[this.record.length-1][0];
@@ -227,6 +234,7 @@ export default {
   destroyed() {
     console.log("destroyed");
     clearTimeout();
+    clearInterval();
   },
   methods: {
     startTime() {
@@ -330,6 +338,9 @@ export default {
     },
     eventInfectedPatcher(date) {
       this.calculateInfected(1+Math.round((new Date(date).getTime() - new Date().getTime()) / 1000 / 86400));
+    },
+    updateTime() {
+      this.currentWuhanTime = moment().zone("+08:00").format("MM-DD-YYYY, h:mm:ss A")
     }
   }
 };
